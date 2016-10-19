@@ -543,7 +543,8 @@ Patch474: PCI-Lock-down-BAR-access-when-module-security-is-ena.patch
 # Fails to patch with grsecurity
 #Patch477: asus-wmi-Restrict-debugfs-interface-when-module-load.patch
 
-Patch478: Restrict-dev-mem-and-dev-kmem-when-module-loading-is.patch
+# Fails to patch with grsecurity
+#Patch478: Restrict-dev-mem-and-dev-kmem-when-module-loading-is.patch
 
 Patch479: acpi-Ignore-acpi_rsdp-kernel-parameter-when-module-l.patch
 
