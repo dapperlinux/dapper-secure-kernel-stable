@@ -54,7 +54,7 @@ Summary: The Linux kernel
 %if 0%{?released_kernel}
 
 # Do we have a -stable update to apply?
-%define stable_update 8
+%define stable_update 10
 # Set rpm version accordingly
 %if 0%{?stable_update}
 %define stablerev %{stable_update}
@@ -648,7 +648,7 @@ Patch864: 0001-iio-Use-event-header-from-kernel-tree.patch
 # Fails to patch with grsecurity
 # Patch865: arcmsr-buffer-overflow-in-archmsr_iop_message_xfer.patch
 
-Patch999: grsecurity-3.1-4.7.8-201610161720.patch
+Patch999: grsecurity-3.1-4.7.10-201610222037.patch
 
 # END OF PATCH DEFINITIONS
 
