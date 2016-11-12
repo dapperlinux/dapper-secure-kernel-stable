@@ -147,6 +147,7 @@ You can continue to find all of the other collisions. Here is the list that Dapp
 #Patch477: asus-wmi-Restrict-debugfs-interface-when-module-load.patch
 #Patch478: Restrict-dev-mem-and-dev-kmem-when-module-loading-is.patch
 #Patch486: hibernate-Disable-in-a-signed-modules-environment.patch
+#Patch494: disable-i8042-check-on-apple-mac.patch
 ```
 
 Now when we run the patch command we just find:
