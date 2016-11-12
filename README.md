@@ -11,7 +11,7 @@ The build process is heavily based on the Fedora Linux kernel build process, and
 
 | Dapper Linux | Linux Version | Grsecurity Patch        |
 | ------------ | ------------- | ----------------------- |
-| 24           | 4.7.10        | 3.1-4.7.10-201610222037 |
+| 25           | 4.8.7         | 3.1-4.8.7-201611102210  |
 
 
 ### Packaging and Building a Source RPM for COPR
@@ -33,7 +33,7 @@ Next, we get the current kernel source RPM, install it to the rpmbuild dir and f
 
 ```bash
 $ yumdownloader --source kernel
-$ rpm -Uvh kernel-kernel-4.7.7-200.fc24.src.rpm
+$ rpm -Uvh kernel-kernel-4.8.7-200.fc25.src.rpm
 $ sudo dnf builddep kernel
 $ sudo dnf install numactl-devel pesign
 ```
@@ -42,16 +42,16 @@ Now we fetch the test patch from [grsecurity](https://grsecurity.net/download.ph
 
 ```bash
 $ cd ~/rpmbuild/SOURCES
-$ wget https://grsecurity.net/test/grsecurity-3.1-4.7.7-201610101902.patch
-$ wget https://grsecurity.net/test/grsecurity-3.1-4.7.7-201610101902.patch.sig
+$ wget https://grsecurity.net/test/grsecurity-3.1-4.8.7-201611102210.patch
+$ wget https://grsecurity.net/test/grsecurity-3.1-4.8.7-201611102210.patch.sig
 ```
 
 Now we verify the signiture of the patch (you might have to [import](http://en.wikibooks.org/wiki/Grsecurity/Obtaining_grsecurity#Verifying_the_Downloads) the signing key first). Ensure the signature is good.
 
 ```bash
-$ gpg --verify grsecurity-3.1-4.7.7-201610101902.patch.sig 
-gpg: assuming signed data in `grsecurity-3.1-4.7.7-201610101902.patch'
-gpg: Signature made Tue 11 Oct 2016 12:06:25 NZDT using RSA key ID 2525FE49
+$ gpg --verify grsecurity-3.1-4.8.7-201611102210.patch.sig
+gpg: assuming signed data in `grsecurity-3.1-4.8.7-201611102210.patch'
+gpg: Signature made Fri 11 Nov 2016 16:12:10 NZDT using RSA key ID 2525FE49
 gpg: Good signature from "Bradley Spengler (spender) <spender@grsecurity.net>"
 gpg: WARNING: This key is not certified with a trusted signature!
 gpg:          There is no indication that the signature belongs to the owner.
@@ -94,7 +94,7 @@ Now we need to add the patch. So before:
 add:
 
 ```spec
-Patch26000: grsecurity-3.1-4.7.7-201610101902.patch
+Patch26000: grsecurity-3.1-4.8.7-201611102210.patch
 ```
 
 Then try and apply the patch. Note the -bp flag on rpmbuild will run the %prep section of the .spec file, which does the uncompressing and patching.
@@ -103,7 +103,7 @@ Then try and apply the patch. Note the -bp flag on rpmbuild will run the %prep s
 $ cd ~/rpmbuild/SPECS
 $ rpmbuild -bp kernel.spec
 [...]
-error: patch failed: arch/x86/entry/vdso/Makefile:168
+error: patch failed: arch/x86/entry/vdso/Makefile:170
 error: arch/x86/entry/vdso/Makefile: patch does not apply
 error: patch failed: arch/x86/kernel/ioport.c:30
 error: arch/x86/kernel/ioport.c: patch does not apply
@@ -111,13 +111,9 @@ error: patch failed: drivers/acpi/custom_method.c:29
 error: drivers/acpi/custom_method.c: patch does not apply
 error: patch failed: drivers/platform/x86/asus-wmi.c:1872
 error: drivers/platform/x86/asus-wmi.c: patch does not apply
-error: patch failed: drivers/scsi/arcmsr/arcmsr_hba.c:2388
-error: drivers/scsi/arcmsr/arcmsr_hba.c: patch does not apply
-error: patch failed: init/Kconfig:1155
+error: patch failed: init/Kconfig:1158
 error: init/Kconfig: patch does not apply
-error: patch failed: kernel/power/hibernate.c:1159
-error: kernel/power/hibernate.c: patch does not apply
-Patch failed at 0087 
+Patch failed at 0093 
 [...]
 ```
 
@@ -126,16 +122,13 @@ It is completly normal to fail at this stage. Most of these patches will fail be
 ```bash
 $ cd ~/rpmbuild/SOURCES
 $ grep -Rin ioport\.c .
-./x86-Lock-down-IO-port-access-when-module-security-is.patch:14: arch/x86/kernel/ioport.c | 5 +++--
-./x86-Lock-down-IO-port-access-when-module-security-is.patch:18:diff --git a/arch/x86/kernel/ioport.c b/arch/x86/kernel/ioport.c
-./x86-Lock-down-IO-port-access-when-module-security-is.patch:20:--- a/arch/x86/kernel/ioport.c
-./x86-Lock-down-IO-port-access-when-module-security-is.patch:21:+++ b/arch/x86/kernel/ioport.c
-./grsecurity-3.1-4.7.7-201610101902.patch~:28363:diff --git a/arch/x86/kernel/ioport.c b/arch/x86/kernel/ioport.c
-./grsecurity-3.1-4.7.7-201610101902.patch~:28365:--- a/arch/x86/kernel/ioport.c
-./grsecurity-3.1-4.7.7-201610101902.patch~:28366:+++ b/arch/x86/kernel/ioport.c
-./grsecurity-3.1-4.7.7-201610101902.patch:28368:diff --git a/arch/x86/kernel/ioport.c b/arch/x86/kernel/ioport.c
-./grsecurity-3.1-4.7.7-201610101902.patch:28370:--- a/arch/x86/kernel/ioport.c
-./grsecurity-3.1-4.7.7-201610101902.patch:28371:+++ b/arch/x86/kernel/ioport.c
+./x86-Lock-down-IO-port-access-when-module-security-is.patch:13: arch/x86/kernel/ioport.c | 5 +++--
+./x86-Lock-down-IO-port-access-when-module-security-is.patch:17:diff --git a/arch/x86/kernel/ioport.c b/arch/x86/kernel/ioport.c
+./x86-Lock-down-IO-port-access-when-module-security-is.patch:19:--- a/arch/x86/kernel/ioport.c
+./x86-Lock-down-IO-port-access-when-module-security-is.patch:20:+++ b/arch/x86/kernel/ioport.c
+./grsecurity-3.1-4.8.7-201611102210.patch:29139:diff --git a/arch/x86/kernel/ioport.c b/arch/x86/kernel/ioport.c
+./grsecurity-3.1-4.8.7-201611102210.patch:29141:--- a/arch/x86/kernel/ioport.c
+./grsecurity-3.1-4.8.7-201611102210.patch:29142:+++ b/arch/x86/kernel/ioport.c
 ```
 
 We can see the x86-Lock-down-IO-port-access-when-module-security-is.patch is causing problems, so we can comment it out in the kernel.spec file. 
@@ -145,17 +138,15 @@ We can see the x86-Lock-down-IO-port-access-when-module-security-is.patch is cau
 #Patch475: x86-Lock-down-IO-port-access-when-module-security-is.patch
 ```
 
-You can continue to find all of the other collisions. Here is the list that Dapper Linux comments out:
+You can continue to find all of the other collisions. Here is the list that Dapper Linux comments out (as of Linux 4.8.7)
 
 ```spec
 # Fails to patch with grsecurity
 #Patch475: x86-Lock-down-IO-port-access-when-module-security-is.patch
 #Patch476: ACPI-Limit-access-to-custom_method.patch
 #Patch477: asus-wmi-Restrict-debugfs-interface-when-module-load.patch
-#Patch486: hibernate-Disable-in-a-signed-modules-environment.patch
-#Patch862: tip-x86-boot-x86-KASLR-x86-power-Remove-x86-hibernation-restrictions.patch
-#Patch865: arcmsr-buffer-overflow-in-archmsr_iop_message_xfer.patch
 #Patch478: Restrict-dev-mem-and-dev-kmem-when-module-loading-is.patch
+#Patch486: hibernate-Disable-in-a-signed-modules-environment.patch
 ```
 
 Now when we run the patch command we just find:
@@ -163,11 +154,11 @@ Now when we run the patch command we just find:
 ```bash
 $ rpmbuild -bp kernel.spec
 [...]
-error: patch failed: arch/x86/entry/vdso/Makefile:168
+error: patch failed: arch/x86/entry/vdso/Makefile:170
 error: arch/x86/entry/vdso/Makefile: patch does not apply
-error: patch failed: init/Kconfig:1155
+error: patch failed: init/Kconfig:1158
 error: init/Kconfig: patch does not apply
-Patch failed at 0081 
+Patch failed at 0088 
 [...]
 ```
 
@@ -176,9 +167,9 @@ Now, both Fedora and grsecurity both patch the vsdo Makefile, and the Kconfig wi
 We need to find which patch file is in disagreement with the grsecurity patch, and then decide which patch we want to ship. So we will do a grep over the source files like so:
 
 ```bash
-$ grep -Rin "a/arch/x86/entry/vdso/Makefile" grsecurity-3.1-4.7.7-201610101902
-18337:diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-18339:--- a/arch/x86/entry/vdso/Makefile
+$ grep -Rin "a/arch/x86/entry/vdso/Makefile" grsecurity-3.1-4.8.7-201611102210.patch
+18793:diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+18795:--- a/arch/x86/entry/vdso/Makefile
 ```
 
 Since the Fedora version is much more in depth than the simple changes to provide some compiler warning from grsecurity, we will remove the vsdo patch from grsecurity. Take note from grep, since it tells you the line you need to modify. I recommend using vim, and using the dd command to delete a line at a time.
@@ -186,35 +177,20 @@ Since the Fedora version is much more in depth than the simple changes to provid
 You want to remove the following from the grsecurity patch.
 
 ```git
-$ vim grsecurity-3.1-4.7.7-201610101902.patch +18337
+$ vim grsecurity-3.1-4.8.7-201611102210.patch +18793
 diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index 253b72e..e0fb97e 100644
+index d540966..443f0d7 100644
 --- a/arch/x86/entry/vdso/Makefile
 +++ b/arch/x86/entry/vdso/Makefile
-@@ -75,7 +75,7 @@ CFL := $(PROFILING) -mcmodel=small -fPIC -O2 -fasynchronous-unwind-tables        -m64 \
-         -fno-omit-frame-pointer -foptimize-sibling-calls \
-         -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO 
--$(vobjs): KBUILD_CFLAGS += $(CFL)
-+$(vobjs): KBUILD_CFLAGS := $(filter-out $(GCC_PLUGINS_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
-   
- #
- # vDSO code runs in userspace and -pg doesn't help with profiling anyway.
-@@ -145,6 +145,7 @@ KBUILD_CFLAGS_32 := $(filter-out -m64,$(KBUILD_CFLAGS))
- KBUILD_CFLAGS_32 := $(filter-out -mcmodel=kernel,$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out -fno-pic,$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out -mfentry,$(KBUILD_CFLAGS_32))
-+KBUILD_CFLAGS_32 := $(filter-out $(GCC_PLUGINS_CFLAGS),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 += -m32 -msoft-float -mregparm=0 -fpic
- KBUILD_CFLAGS_32 += $(call cc-option, -fno-stack-protector)
- KBUILD_CFLAGS_32 += $(call cc-option, -foptimize-sibling-calls)
-@@ -168,7 +169,7 @@ quiet_cmd_vdso = VDSO    $@
-                 -Wl,-T,$(filter %.lds,$^) $(filter %.o,$^) && \
-           sh $(srctree)/$(src)/checkundef.sh '$(NM)' '$@'
-   
-  -VDSO_LDFLAGS = -fPIC -shared $(call cc-ldoption, -Wl$(comma)--hash-style=both) \
-  +VDSO_LDFLAGS = -fPIC -shared -Wl,--no-undefined $(call cc-ldoption, -Wl$(comma)--hash-style       =both) \
-      $(call cc-ldoption, -Wl$(comma)--build-id) -Wl,-Bsymbolic $(LTO_CFLAGS)
-   GCOV_PROFILE := n
+@@ -170,7 +170,7 @@ quiet_cmd_vdso = VDSO    $@
+               -Wl,-T,$(filter %.lds,$^) $(filter %.o,$^) && \
+         sh $(srctree)/$(src)/checkundef.sh '$(NM)' '$@'
+ 
+-VDSO_LDFLAGS = -fPIC -shared $(call cc-ldoption, -Wl$(comma)--hash-style=both) \
++VDSO_LDFLAGS = -fPIC -shared -Wl,--no-undefined $(call cc-ldoption, -Wl$(comma)--hash-sty       le=both) \
+    $(call cc-ldoption, -Wl$(comma)--build-id) -Wl,-Bsymbolic $(LTO_CFLAGS)
+ GCOV_PROFILE := n
+
 ```
 
 Next up is fixing the Kconfig file. It seems Fedora and grsecurity double up on CHECKPOINT_RESTORE
@@ -222,16 +198,16 @@ Next up is fixing the Kconfig file. It seems Fedora and grsecurity double up on 
 We find what Line it belongs to by searching for "CHECKPOINT_RESTORE"
 
 ```bash
-$ grep -Rin "CHECKPOINT_RESTORE" grsecurity-3.1-4.7.7-201610101902.patch
-139310: config CHECKPOINT_RESTORE
-148506: 	depends on CHECKPOINT_RESTORE && HAVE_ARCH_SOFT_DIRTY && PROC_FS
+$ grep -Rin "CHECKPOINT_RESTORE" grsecurity-3.1-4.8.7-201611102210.patch
+142214: config CHECKPOINT_RESTORE
+151682: 	depends on CHECKPOINT_RESTORE && HAVE_ARCH_SOFT_DIRTY && PROC_FS
 ```
 
 We want to go to where it is defined, ie on line 139340:
 
 ```bash
-vim grsecurity-3.1-4.7.7-201610101902.patch +139310
-@@ -1155,6 +1160,7 @@ endif # CGROUPS
+$ vim grsecurity-3.1-4.8.7-201611102210.patch +142214
+@@ -1158,6 +1163,7 @@ endif # CGROUPS
  config CHECKPOINT_RESTORE
     bool "Checkpoint/restore support" if EXPERT
     select PROC_CHILDREN
@@ -244,15 +220,15 @@ vim grsecurity-3.1-4.7.7-201610101902.patch +139310
 Grsecurity also adds a "-grsec" suffix to the end of the kernel local build string. We already do this in the .spec file, so we can remove this to save us from further problems.
 
 ```bash
-$ grep -Rin "localversion-grsec" grsecurity-3.1-4.7.7-201610101902.patch
-148497:diff --git a/localversion-grsec b/localversion-grsec
-148501:+++ b/localversion-grsec
+$ grep -Rin "localversion-grsec" grsecurity-3.1-4.8.7-201611102210.patch
+151635:diff --git a/localversion-grsec b/localversion-grsec
+151639:+++ b/localversion-grsec
 ```
 
 So we need to jump to line 148497 and remove the following:
 
 ```git
-$ vim grsecurity-3.1-4.7.7-201610101902.patch +148497
+$ vim grsecurity-3.1-4.8.7-201611102210.patch +151635
 diff --git a/localversion-grsec b/localversion-grsec
 new file mode 100644
 index 0000000..7cd6065
@@ -276,7 +252,7 @@ error: Bad exit status from /var/tmp/rpm-tmp.LkHtMV (%prep)
 This is because the patch system is managed with git, and a new user.name and user.email are attached to every patch submitted to the branch we are modifying. Now, grsecurity does not ship with this information causing the filds in author-script to become empty:
 
 ```bash
-$ cd rpmbuild/BUILD/kernel-4.7.fc24/linux-4.7.7-200.grsec.fc24.x86_64/.git/rebase-apply/
+$ cd rpmbuild/BUILD/kernel-4.8.fc25/linux-4.8.7-200.grsec.fc25.x86_64/.git/rebase-apply/
 $ cat author-script
 GIT_AUTHOR_NAME=''
 GIT_AUTHOR_EMAIL=''
@@ -286,9 +262,9 @@ GIT_AUTHOR_DATE=''
 We can fix this by adding the following to the top of the grsecurity patch:
 
 ```bash
-$ vim grsecurity-3.1-4.7.7-201610101902.patch +1
+$ vim grsecurity-3.1-4.8.7-201611102210.patch +1
 From: "kernel-team@dapperlinux.com" <kernel-team@dapperlinux.com>
-Date: Mon, 10 Oct 2016 00:00:00 +0000
+Date: Sat, 12 Nov 2016 00:00:00 +0000
 Subject: [PATCH] Grsecurity Patchset
 ---
 ```
@@ -327,16 +303,15 @@ error: Bad exit status from /var/tmp/rpm-tmp.ioWAuT (%prep)
 This just means that there are options that are required to be configured in the kernel that haven't been configured yet. Namely, the grsecurity options haven't been configured yet. So, we will go to the build directory and run make menuconfig to select what grsecurity options we require. Grsecurity options live in Security -> Grsecurity.
 
 ```bash
-$ cd ~/rpmbuild/BUILD/kernel-4.7.fc24/linux-4.7.8-200.grsec.fc24.x86_64
+$ cd ~/rpmbuild/BUILD/kernel-4.8.fc24/linux-4.8.7-300.grsec.fc24.x86_64/
 $ make menuconfig
 ```
 
 Once you have set your options, save them, and copy all custom options, which will include all CONFIG_GRKERNSEC and CONFIG_PAX options into SOURCES/config-local. You can find Dapper Linux's options [here](config-local)
 
 ```bash
-$ grep "CONFIG_GRKERNSEC" .config >> ~/rpmbuild/SOURCES/config-local
-$ grep "CONFIG_PAX" .config >> ~/rpmbuild/SOURCES/config-local
-$ most ~/rpmbuild/SOURCES/config-local
+$ grep "CONFIG_GRKERNSEC*" .config >> ~/rpmbuild/SOURCES/config-local
+$ grep "CONFIG_PAX*" .config >> ~/rpmbuild/SOURCES/config-local
 ```
 
 Grsecurity also adds in some new misc options, which we must also address
@@ -345,10 +320,17 @@ Grsecurity also adds in some new misc options, which we must also address
 $ cat >> ~/rpmbuild/SOURCES/config-local << EOF
 CONFIG_NETFILTER_XT_MATCH_GRADM=n
 CONFIG_GCC_PLUGINS=y
+# CONFIG_GCC_PLUGIN_CYC_COMPLEXITY is not set
 # CONFIG_KMEMCHECK is not set
 CONFIG_DEFAULT_MODIFY_LDT_SYSCALL=n
 CONFIG_STACKTRACE=n
 EOF
+```
+
+You can view your final config here:
+
+```bash
+$ most ~/rpmbuild/SOURCES/config-local
 ```
 
 Hopefully that's all we need to do, so change back to the SPECS directory and do a test patch to see that everything goes smoothly
@@ -362,7 +344,7 @@ And finally, we can generate a source RPM for the copr or koji build system
 
 ```bash
 $ rpmbuild -bs kernel.spec
-Wrote: ~/rpmbuild/SRPMS/dapper-kernel-grsec-4.7.8-200.grsec.fc24.src.rpm
+Wrote: ~/rpmbuild/SRPMS/kernel-4.8.7-300.grsec.fc25.src.rpm
 ```
 
 It's probably worth doing a test build before submitting it to a build server, so we can weed out any last minute compilation bugs. The following will build just the dapper-kernel-grsec, dapper-kernel-grsec-core, dapper-kernel-grsec-modules and dapper-kernel-grsec-modules-extra
