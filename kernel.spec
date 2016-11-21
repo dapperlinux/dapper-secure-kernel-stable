@@ -632,7 +632,7 @@ Patch846: security-selinux-overlayfs-support.patch
 Patch847: rc-core-fix-repeat-events.patch
 
 #rhbz 1374212
-Patch848: 0001-cpupower-Correct-return-type-of-cpu_power_is_cpu_onl.patch
+#Patch848: 0001-cpupower-Correct-return-type-of-cpu_power_is_cpu_onl.patch
 
 #ongoing complaint, full discussion delayed until ksummit/plumbers
 Patch849: 0001-iio-Use-event-header-from-kernel-tree.patch
@@ -643,7 +643,7 @@ Patch850: v3-vfio-pci-Fix-integer-overflows-bitmask-check.patch
 #rhbz 1325354
 Patch852: 0001-HID-input-ignore-System-Control-application-usages-i.patch
 
-Patch26000: grsecurity-3.1-4.8.9-201611192033
+Patch26000: grsecurity-3.1-4.8.9-201611192033.patch
 # END OF PATCH DEFINITIONS
 
 %endif
