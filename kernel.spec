@@ -54,7 +54,7 @@ Summary: The Linux kernel
 %if 0%{?released_kernel}
 
 # Do we have a -stable update to apply?
-%define stable_update 11
+%define stable_update 12
 # Set rpm version accordingly
 %if 0%{?stable_update}
 %define stablerev %{stable_update}
@@ -89,16 +89,16 @@ Summary: The Linux kernel
 # kernel PAE (only valid for i686 (PAE) and ARM (lpae))
 %define with_pae       %{?_without_pae:       0} %{?!_without_pae:       1}
 # kernel-debug
-%define with_debug     %{?_without_debug:     0} %{?!_without_debug:     1}
+%define with_debug     %{?_without_debug:     0} %{?!_without_debug:     0}
 # kernel-headers
 %define with_headers   %{?_without_headers:   0} %{?!_without_headers:   1}
 %define with_cross_headers   %{?_without_cross_headers:   0} %{?!_without_cross_headers:   1}
 # perf
-%define with_perf      %{?_without_perf:      0} %{?!_without_perf:      1}
+%define with_perf      %{?_without_perf:      0} %{?!_without_perf:      0}
 # tools
-%define with_tools     %{?_without_tools:     0} %{?!_without_tools:     1}
+%define with_tools     %{?_without_tools:     0} %{?!_without_tools:     0}
 # kernel-debuginfo
-%define with_debuginfo %{?_without_debuginfo: 0} %{?!_without_debuginfo: 1}
+%define with_debuginfo %{?_without_debuginfo: 0} %{?!_without_debuginfo: 0}
 # kernel-bootwrapper (for creating zImages from kernel + initrd)
 %define with_bootwrapper %{?_without_bootwrapper: 0} %{?!_without_bootwrapper: 1}
 # Want to build a the vsdo directories installed
@@ -643,7 +643,7 @@ Patch850: v3-vfio-pci-Fix-integer-overflows-bitmask-check.patch
 #rhbz 1325354
 Patch852: 0001-HID-input-ignore-System-Control-application-usages-i.patch
 
-Patch26000: grsecurity-3.1-4.8.11-201611271225.patch
+Patch26000: grsecurity-3.1-4.8.12-201612031658.patch
 # END OF PATCH DEFINITIONS
 
 %endif
