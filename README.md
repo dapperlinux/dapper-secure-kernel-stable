@@ -284,6 +284,13 @@ to:
 for i in %{all_arch_configs}
 ```
 
+Now, grsecurity requires we add an extra dependancy for build, gcc-plugin-devel, since many security features are added at compile time. So add this just below the BuildRequires section, and just above the Sources section.
+
+```spec
+#Required for grsecurity
++BuildRequires: gcc-plugin-devel
+```
+
 and now we can try and patch again and find the patches now work, but we have more errors:
 
 ```bash
