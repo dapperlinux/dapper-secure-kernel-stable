@@ -11,7 +11,7 @@ The build process is heavily based on the Fedora Linux kernel build process, and
 
 | Dapper Linux | Linux Version | Grsecurity Patch        |
 | ------------ | ------------- | ----------------------- |
-| 25           | 4.8.14        | 3.1-4.8.14-201612110933 |
+| 25           | 4.8.17        | 3.1-4.8.17-201701151620 |
 
 
 ### Packaging and Building a Source RPM for COPR
@@ -288,7 +288,7 @@ Now, grsecurity requires we add an extra dependancy for build, gcc-plugin-devel,
 
 ```spec
 #Required for grsecurity
-+BuildRequires: gcc-plugin-devel
+BuildRequires: gcc-plugin-devel
 ```
 
 and now we can try and patch again and find the patches now work, but we have more errors:

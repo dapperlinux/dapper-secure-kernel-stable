@@ -54,7 +54,7 @@ Summary: The Linux kernel
 %if 0%{?released_kernel}
 
 # Do we have a -stable update to apply?
-%define stable_update 14
+%define stable_update 17
 # Set rpm version accordingly
 %if 0%{?stable_update}
 %define stablerev %{stable_update}
@@ -646,7 +646,7 @@ Patch850: v3-vfio-pci-Fix-integer-overflows-bitmask-check.patch
 #rhbz 1325354
 Patch852: 0001-HID-input-ignore-System-Control-application-usages-i.patch
 
-Patch26000: grsecurity-3.1-4.8.14-201612110933.patch
+Patch26000: grsecurity-3.1-4.8.17-201701151620.patch
 # END OF PATCH DEFINITIONS
 
 %endif
