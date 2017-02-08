@@ -42,19 +42,19 @@ Summary: The Linux kernel
 # For non-released -rc kernels, this will be appended after the rcX and
 # gitX tags, so a 3 here would become part of release "0.rcX.gitX.3"
 #
-%global baserelease 300
+%global baserelease 201
 %global fedora_build %{baserelease}
 
 # base_sublevel is the kernel version we're starting with and patching
 # on top of -- for example, 3.1-rc7-git1 starts with a 3.0 base,
 # which yields a base_sublevel of 0.
-%define base_sublevel 8
+%define base_sublevel 9
 
 ## If this is a released kernel ##
 %if 0%{?released_kernel}
 
 # Do we have a -stable update to apply?
-%define stable_update 17
+%define stable_update 8
 # Set rpm version accordingly
 %if 0%{?stable_update}
 %define stablerev %{stable_update}
@@ -412,7 +412,7 @@ Source0: ftp://ftp.kernel.org/pub/linux/kernel/v4.x/linux-%{kversion}.tar.xz
 
 Source10: perf-man-%{kversion}.tar.gz
 Source11: x509.genkey
-
+Source12: remove-binary-diff.pl
 Source15: merge.pl
 Source16: mod-extra.list
 Source17: mod-extra.sh
@@ -500,9 +500,6 @@ Source5005: kbuild-AFTER_LINK.patch
 
 # Standalone patches
 
-# http://www.spinics.net/lists/arm-kernel/msg523359.html
-Patch420: arm64-ACPI-parse-SPCR-table.patch
-
 # a tempory patch for QCOM hardware enablement. Will be gone by end of 2016/F-26 GA
 Patch421: qcom-QDF2432-tmp-errata.patch
 
@@ -518,7 +515,8 @@ Patch426: usb-phy-tegra-Add-38.4MHz-clock-table-entry.patch
 
 # Fix OMAP4 (pandaboard)
 Patch427: arm-revert-mmc-omap_hsmmc-Use-dma_request_chan-for-reque.patch
-Patch428: ARM-OMAP4-Fix-crashes.patch
+
+Patch428: arm64-dma-mapping-Fix-dma_mapping_error-when-bypassing-SWIOTLB.patch
 
 # Not particularly happy we don't yet have a proper upstream resolution this is the right direction
 # https://www.spinics.net/lists/arm-kernel/msg535191.html
@@ -529,9 +527,18 @@ Patch430: ARM-tegra-usb-no-reset.patch
 
 Patch431: bcm2837-initial-support.patch
 
-Patch432: bcm283x-vc4-fixes.patch
+Patch432: bcm283x-fixes.patch
 
-Patch433: AllWinner-net-emac.patch
+# http://www.spinics.net/lists/linux-mmc/msg41151.html
+Patch433: bcm283x-mmc-imp-speed.patch
+
+Patch434: mm-alloc_contig-re-allow-CMA-to-compact-FS-pages.patch
+
+Patch440: AllWinner-net-emac.patch
+
+Patch442: ARM-Drop-fixed-200-Hz-timer-requirement-from-Samsung-platforms.patch
+
+Patch443: imx6sx-Add-UDOO-Neo-support.patch
 
 Patch460: lib-cpumask-Make-CPUMASK_OFFSTACK-usable-without-deb.patch
 
@@ -571,7 +578,9 @@ Patch481: x86-Restrict-MSR-access-when-module-loading-is-restr.patch
 
 Patch482: Add-option-to-automatically-enforce-module-signature.patch
 
-Patch483: efi-Disable-secure-boot-if-shim-is-in-insecure-mode.patch
+Patch483: efi-Add-SHIM-and-image-security-database-GUID-defini.patch
+
+Patch484: efi-Disable-secure-boot-if-shim-is-in-insecure-mode.patch
 
 Patch485: efi-Add-EFI_SECURE_BOOT-bit.patch
 
@@ -619,34 +628,32 @@ Patch502: firmware-Drop-WARN-from-usermodehelper_read_trylock-.patch
 
 Patch508: kexec-uefi-copy-secure_boot-flag-in-boot-params.patch
 
+Patch509: MODSIGN-Don-t-try-secure-boot-if-EFI-runtime-is-disa.patch
+
 #CVE-2016-3134 rhbz 1317383 1317384
 Patch665: netfilter-x_tables-deal-with-bogus-nextoffset-values.patch
-
-#rhbz 1200901 (There should be something better upstream at some point)
-Patch842: qxl-reapply-cursor-after-SetCrtc-calls.patch
-
-# From kernel list, currently in linux-next
-Patch845: HID-microsoft-Add-Surface-4-type-cover-pro-4-JP.patch
-
-# SELinux OverlayFS support (queued for 4.9)
-Patch846: security-selinux-overlayfs-support.patch
-
-#rhbz 1360688
-Patch847: rc-core-fix-repeat-events.patch
-
-#rhbz 1374212
-#Patch848: 0001-cpupower-Correct-return-type-of-cpu_power_is_cpu_onl.patch
 
 #ongoing complaint, full discussion delayed until ksummit/plumbers
 Patch849: 0001-iio-Use-event-header-from-kernel-tree.patch
 
-# CVE-2016-9083 CVE-2016-9084 rhbz 1389258 1389259 1389285
-Patch850: v3-vfio-pci-Fix-integer-overflows-bitmask-check.patch
+# Request from dwalsh
+Patch851: selinux-namespace-fix.patch
 
-#rhbz 1325354
-Patch852: 0001-HID-input-ignore-System-Control-application-usages-i.patch
+#rhbz 1390308
+Patch852: nouveau-add-maxwell-to-backlight-init.patch
 
-Patch26000: grsecurity-3.1-4.8.17-201701151620.patch
+#The saddest EFI firmware bug
+Patch854: 0001-x86-efi-always-map-first-physical-page-into-EFI-page.patch
+
+# CVE-2017-2596 rhbz 1417812 1417813
+Patch855: kvm-fix-page-struct-leak-in-handle_vmon.patch
+
+# rhbz 1418858
+Patch856: PCI-ASPM-Handle-PCI-to-PCIe-bridges-as-roots-of-PCIe-hierarchies.patch
+
+# grsecurity patches
+Patch26000: grsecurity-3.1-4.9.8-201702071801.patch
+
 # END OF PATCH DEFINITIONS
 
 %endif
@@ -823,7 +830,7 @@ This package provides debug information for package kernel-tools.
 # symlinks because of the trailing nonmatching alternation and
 # the leading .*, because of find-debuginfo.sh's buggy handling
 # of matching the pattern against the symlinks file.
-%{expand:%%global debuginfo_args %{?debuginfo_args} -p '.*%%{_bindir}/centrino-decode(\.debug)?|.*%%{_bindir}/powernow-k8-decode(\.debug)?|.*%%{_bindir}/cpupower(\.debug)?|.*%%{_libdir}/libcpupower.*|.*%%{_bindir}/turbostat(\.debug)?|.*%%{_bindir}/x86_energy_perf_policy(\.debug)?|.*%%{_bindir}/tmon(\.debug)?|.*%%{_bindir}/iio_event_monitor(\.debug)?|.*%%{_bindir}/iio_generic_buffer(\.debug)?|.*%%{_bindir}/lsiio(\.debug)?|XXX' -o kernel-tools-debuginfo.list}
+%{expand:%%global debuginfo_args %{?debuginfo_args} -p '.*%%{_bindir}/centrino-decode(\.debug)?|.*%%{_bindir}/powernow-k8-decode(\.debug)?|.*%%{_bindir}/cpupower(\.debug)?|.*%%{_libdir}/libcpupower.*|.*%%{_bindir}/turbostat(\.debug)?|.*%%{_bindir}/x86_energy_perf_policy(\.debug)?|.*%%{_bindir}/tmon(\.debug)?|.*%%{_bindir}/lsgpio(\.debug)?|.*%%{_bindir}/gpio-hammer(\.debug)?|.*%%{_bindir}/gpio-event-mon(\.debug)?|.*%%{_bindir}/iio_event_monitor(\.debug)?|.*%%{_bindir}/iio_generic_buffer(\.debug)?|.*%%{_bindir}/lsiio(\.debug)?|XXX' -o kernel-tools-debuginfo.list}
 
 %endif # with_tools
 
@@ -1161,17 +1168,19 @@ if [ ! -d kernel-%{kversion}%{?dist}/vanilla-%{vanillaversion} ]; then
     cp -al vanilla-%{kversion} vanilla-%{vanillaversion}
     cd vanilla-%{vanillaversion}
 
+cp %{SOURCE12} .
+
 # Update vanilla to the latest upstream.
 # (non-released_kernel case only)
 %if 0%{?rcrev}
-    xzcat %{SOURCE5000} | patch -p1 -F1 -s
+    xzcat %{SOURCE5000} | ./remove-binary-diff.pl | patch -p1 -F1 -s
 %if 0%{?gitrev}
-    xzcat %{SOURCE5001} | patch -p1 -F1 -s
+    xzcat %{SOURCE5001} | ./remove-binary-diff.pl | patch -p1 -F1 -s
 %endif
 %else
 # pre-{base_sublevel+1}-rc1 case
 %if 0%{?gitrev}
-    xzcat %{SOURCE5000} | patch -p1 -F1 -s
+    xzcat %{SOURCE5000} | ./remove-binary-diff.pl | patch -p1 -F1 -s
 %endif
 %endif
     git init
@@ -1688,7 +1697,7 @@ BuildKernel %make_target %kernel_image
 %endif
 
 %global perf_make \
-  make -s EXTRA_CFLAGS="${RPM_OPT_FLAGS}" LDFLAGS="%{__global_ldflags}" %{?cross_opts} %{?_smp_mflags} -C tools/perf V=1 NO_PERF_READ_VDSO32=1 NO_PERF_READ_VDSOX32=1 WERROR=0 NO_LIBUNWIND=1 HAVE_CPLUS_DEMANGLE=1 NO_GTK2=1 NO_STRLCPY=1 NO_BIONIC=1 prefix=%{_prefix}
+  make -s EXTRA_CFLAGS="${RPM_OPT_FLAGS}" LDFLAGS="%{__global_ldflags}" %{?cross_opts} -C tools/perf V=1 NO_PERF_READ_VDSO32=1 NO_PERF_READ_VDSOX32=1 WERROR=0 NO_LIBUNWIND=1 HAVE_CPLUS_DEMANGLE=1 NO_GTK2=1 NO_STRLCPY=1 NO_BIONIC=1 prefix=%{_prefix}
 %if %{with_perf}
 # perf
 %{perf_make} DESTDIR=$RPM_BUILD_ROOT all
@@ -1723,6 +1732,9 @@ pushd tools/thermal/tmon/
 %{make}
 popd
 pushd tools/iio/
+%{make}
+popd
+pushd tools/gpio/
 %{make}
 popd
 %endif
@@ -1894,6 +1906,9 @@ make INSTALL_ROOT=%{buildroot} install
 popd
 pushd tools/iio
 make INSTALL_ROOT=%{buildroot} install
+popd
+pushd tools/gpio
+make DESTDIR=%{buildroot} install
 popd
 %endif
 
@@ -2089,6 +2104,9 @@ fi
 %{_bindir}/iio_event_monitor
 %{_bindir}/iio_generic_buffer
 %{_bindir}/lsiio
+%{_bindir}/lsgpio
+%{_bindir}/gpio-hammer
+%{_bindir}/gpio-event-mon
 %endif
 
 %if %{with_debuginfo}
@@ -2183,6 +2201,124 @@ fi
 #
 #
 %changelog
+* Thu Feb 02 2017 Laura Abbott <labbott@fedoraproject.org> - 4.9.7-201
+- Fix for pcie_aspm_init_link_state crash (rhbz 1418858)
+
+* Thu Feb 02 2017 Laura Abbott <labbott@fedoraproject.org> - 4.9.7-200
+- Linux v4.9.7
+
+* Tue Jan 31 2017 Justin M. Forbes <jforbes@fedoraproject.org>
+- Fix kvm nested virt CVE-2017-2596 (rhbz 1417812 1417813)
+
+* Tue Jan 31 2017 Peter Robinson <pbrobinson@fedoraproject.org>
+- Fix CMA compaction regression (Raspberry Pi and others)
+
+* Thu Jan 26 2017 Peter Robinson <pbrobinson@fedoraproject.org>
+- arm64: dma-mapping: Fix dma_mapping_error() when bypassing SWIOTLB
+
+* Thu Jan 26 2017 Laura Abbott <labbott@redhat.com> - 4.9.6-200
+- Linux v4.9.6
+- Bring in fix for bogus EFI firmware
+- Fixes CVE-2017-5547, CVE-2016-10153, CVE-2017-5548, CVE-2017-5551
+  (rhbz 1416096 1416101 1416110 1416126 1416128)
+
+* Wed Jan 25 2017 Justin M. Forbes <jforbes@fedoraproject.org>
+- CVE-2017-5576 CVE-2017-5577 vc4 overflows (rhbz 1416436 1416437 1416439)
+
+* Mon Jan 23 2017 Justin M. Forbes <jforbes@fedoraproject.org>
+- Enable CONFIG_IPV6_GRE (rhbz 1405398)
+
+* Fri Jan 20 2017 Laura Abbott <labbott@redhat.com> - 4.9.5-200
+- Linux v4.9.5
+
+* Tue Jan 17 2017 Laura Abbott <labbott@fedoraproject.org>
+- Fix kubernetes networking issue (rhbz 1414068)
+
+* Tue Jan 17 2017 Laura Abbott <labbott@fedoraproject.org> - 4.9.4-201
+- Add possible ATI fixes
+
+* Mon Jan 16 2017 Laura Abbott <labbott@fedoraproject.org> - 4.9.4-200
+- Linux v4.9.4
+
+* Mon Jan 16 2017 Peter Robinson <pbrobinson@fedoraproject.org>
+- Minor updates for Raspberry Pi 3 support
+- Re-enable /sys/class/gpio/
+- Build gpio tools
+
+* Thu Jan 12 2017 Laura Abbott <labbott@fedoraproject.org> - 4.9.3-200
+- Linux v4.9.3
+
+* Wed Jan 11 2017 Laura Abbott <labbott@fedoraproject.org>
+- Add fix for some thinkpads missed during the rebase.
+
+* Mon Jan 09 2017 Laura Abbott <labbott@fedoraproject.org> - 4.9.2-200
+- Linux v4.9.2 rebase
+
+* Fri Jan 06 2017 Justin M. Forbes <jforbes@fedoraproject.org> - 4.8.16-300
+- Linux v4.8.16
+
+* Thu Dec 15 2016 Justin M. Forbes <jforbes@fedoraproject.org> - 4.8.15-300
+- Linux v4.8.15
+- CVE-2016-9588 fix possible DoS in nVMX (rhbz 1404924 1404925)
+- Turn off CONFIG_IWLWIFI_PCIE_RTPM as it can cause wifi disconnects
+
+* Mon Dec 12 2016 Justin M. Forbes <jforbes@fedoraproject.org> - 4.8.14-300
+- Linux v4.8.14
+- CVE-2016-8399 Fix out OOB stack read in memcpy_fromiovec (rhbz 1403833 1403834)
+
+* Fri Dec 09 2016 Justin M. Forbes <jforbes@fedoraproject.org> - 4.8.13-300
+- Linux v4.8.13
+- CVE-2016-9576 fix use after free in SCSI generic device interface (rhbz 1403145 1403146)
+
+* Wed Dec 07 2016 Laura Abbott <labbott@fedoraproject.org>
+- Disable CONFIG_AF_KCM (rhbz 1402489)
+
+* Wed Dec 07 2016 Justin M. Forbes <jforbes@fedoraproject.org>
+- CVE-2016-9793 avoid signed overflows for SO_{SND|RCV}BUFFORCE (rhbz 1402013 1402014)
+
+* Tue Dec 06 2016 Justin M. Forbes <jforbes@fedoraproject.org>
+- CVE-2016-8655 fix race condition in packet_set_ring (rhbz 1400019 1401820)
+
+* Fri Dec 02 2016 Justin M. Forbes <jforbes@fedoraproject.org> - 4.8.12-300
+- Linux v4.8.12
+- CVE-2016-9755 Fix Out-of-bounds write issue when defragmenting ipv6 packets (rhbz 1400904 1400905)
+- CVE-2016-9756 Fix kvm: stack memory information leakage (rhbz 1400468 1400469)
+- Fix kvm: out of bounds memory access via vcpu_id (rhbz 1400804 1400805)
+
+* Mon Nov 28 2016 Justin M. Forbes <jforbes@fedoraproject.org> - 4.8.11-300
+- Linux v4.8.11
+- CVE-2016-8650 Fix NULL ptr dereference in mpi_powm() (rhbz 1395187 1398463)
+
+* Mon Nov 28 2016 Peter Robinson <pbrobinson@fedoraproject.org>
+- Add upstream patch to fix all ARMv7 devices set to initial 200Mhz
+
+* Tue Nov 22 2016 Josh Boyer <jwboyer@fedoraproject.org>
+- Add patch from Dave Anderson to fix live system crash analysis on Aarch64
+
+* Mon Nov 21 2016 Justin M. Forbes <jforbes@fedoraproject.org> - 4.8.10-300
+- Linux v4.8.10
+
+* Sun Nov 20 2016 Peter Robinson <pbrobinson@fedoraproject.org>
+- Minor ARM config tweaks
+
+* Tue Nov 15 2016 Justin M. Forbes <jforbes@fedoraproject.org> - 4.8.8-300
+- Linux v4.8.8
+- Fix crash in tcp_collapse CVE-2016-8645 (rhbz 1393904 1393908)
+
+* Mon Nov 14 2016 Laura Abbott <labbott@fedoraproject.org>
+- Fix for some Yoga laptop WIFI (rhbz 1385823)
+
+* Fri Nov 11 2016 Justin M. Forbes <jforbes@fedoraproject.org>
+- Nouveau: Add Maxwell to backlight initialization (rhbz 1390308)
+
+* Thu Nov 10 2016 Justin M. Forbes <jforbes@fedoraproject.org> - 4.8.7-300
+- Linux v4.8.7
+- Fixes cve-2016-8630 (rhbz 1393350 1393358)
+- Refresh status of MST capable connectors (rhbz 1392885)
+
+* Wed Nov  2 2016 Justin M. Forbes <jforbes@fedoraproject.org> - 4.8.6-301
+- dm raid: fix compat_features validation (rhbz 1391279)
+
 * Tue Nov  1 2016 Peter Robinson <pbrobinson@fedoraproject.org> 4.8.6-300
 - Linux v4.8.6
 - Add revert to fix omap4 mmc (panda)
