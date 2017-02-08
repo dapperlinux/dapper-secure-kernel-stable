@@ -90,8 +90,6 @@ We also do not want particular packages to be built, since it saves a lot of tim
 Change
 
 ```spec
-
-```
 # kernel-debug
 %define with_debug     %{?_without_debug:     0} %{?!_without_debug:     1}
 # kernel-headers
