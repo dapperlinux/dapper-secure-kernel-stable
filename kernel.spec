@@ -54,7 +54,7 @@ Summary: The Linux kernel
 %if 0%{?released_kernel}
 
 # Do we have a -stable update to apply?
-%define stable_update 8
+%define stable_update 9
 # Set rpm version accordingly
 %if 0%{?stable_update}
 %define stablerev %{stable_update}
@@ -642,17 +642,11 @@ Patch851: selinux-namespace-fix.patch
 #rhbz 1390308
 Patch852: nouveau-add-maxwell-to-backlight-init.patch
 
-#The saddest EFI firmware bug
-Patch854: 0001-x86-efi-always-map-first-physical-page-into-EFI-page.patch
-
 # CVE-2017-2596 rhbz 1417812 1417813
 Patch855: kvm-fix-page-struct-leak-in-handle_vmon.patch
 
-# rhbz 1418858
-Patch856: PCI-ASPM-Handle-PCI-to-PCIe-bridges-as-roots-of-PCIe-hierarchies.patch
-
 # grsecurity patches
-Patch26000: grsecurity-3.1-4.9.8-201702071801.patch
+Patch26000: grsecurity-3.1-4.9.9-201702122044.patch
 
 # END OF PATCH DEFINITIONS
 
