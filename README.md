@@ -11,7 +11,7 @@ The build process is heavily based on the Fedora Linux kernel build process, and
 
 | Dapper Linux | Linux Version | Grsecurity Patch        |
 | ------------ | ------------- | ----------------------- |
-| 25           | 4.9.9         | 3.1-4.9.9-201702122044  |
+| 25           | 4.9.11        | 3.1-4.9.11-201702181444 |
 
 
 ### Packaging and Building a Source RPM for COPR
