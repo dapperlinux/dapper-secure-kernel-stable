@@ -54,7 +54,7 @@ Summary: The Linux kernel
 %if 0%{?released_kernel}
 
 # Do we have a -stable update to apply?
-%define stable_update 13
+%define stable_update 14
 # Set rpm version accordingly
 %if 0%{?stable_update}
 %define stablerev %{stable_update}
@@ -516,8 +516,6 @@ Patch426: usb-phy-tegra-Add-38.4MHz-clock-table-entry.patch
 # Fix OMAP4 (pandaboard)
 Patch427: arm-revert-mmc-omap_hsmmc-Use-dma_request_chan-for-reque.patch
 
-Patch428: arm64-dma-mapping-Fix-dma_mapping_error-when-bypassing-SWIOTLB.patch
-
 # Not particularly happy we don't yet have a proper upstream resolution this is the right direction
 # https://www.spinics.net/lists/arm-kernel/msg535191.html
 Patch429: arm64-mm-Fix-memmap-to-be-initialized-for-the-entire-section.patch
@@ -646,7 +644,7 @@ Patch852: nouveau-add-maxwell-to-backlight-init.patch
 Patch855: kvm-fix-page-struct-leak-in-handle_vmon.patch
 
 # grsecurity patches
-Patch26000: grsecurity-3.1-4.9.13-201702270729.patch
+Patch26000: grsecurity-3.1-4.9.14-201703121245.patch
 
 # END OF PATCH DEFINITIONS
 
