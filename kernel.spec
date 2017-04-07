@@ -54,7 +54,7 @@ Summary: The Linux kernel
 %if 0%{?released_kernel}
 
 # Do we have a -stable update to apply?
-%define stable_update 18
+%define stable_update 20
 # Set rpm version accordingly
 %if 0%{?stable_update}
 %define stablerev %{stable_update}
@@ -644,7 +644,7 @@ Patch852: nouveau-add-maxwell-to-backlight-init.patch
 Patch855: kvm-fix-page-struct-leak-in-handle_vmon.patch
 
 # grsecurity patches
-Patch26000: grsecurity-3.1-4.9.18-201703261106.patch
+Patch26000: grsecurity-3.1-4.9.20-201703310823.patch
 
 # END OF PATCH DEFINITIONS
 
