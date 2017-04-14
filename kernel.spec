@@ -54,7 +54,7 @@ Summary: The Linux kernel
 %if 0%{?released_kernel}
 
 # Do we have a -stable update to apply?
-%define stable_update 21
+%define stable_update 22
 # Set rpm version accordingly
 %if 0%{?stable_update}
 %define stablerev %{stable_update}
@@ -506,10 +506,6 @@ Patch421: qcom-QDF2432-tmp-errata.patch
 # http://www.spinics.net/lists/arm-kernel/msg490981.html
 Patch422: geekbox-v4-device-tree-support.patch
 
-# http://www.spinics.net/lists/linux-pci/msg53991.html
-# https://patchwork.kernel.org/patch/9337113/
-Patch425: arm64-pcie-quirks.patch
-
 # http://www.spinics.net/lists/linux-tegra/msg26029.html
 Patch426: usb-phy-tegra-Add-38.4MHz-clock-table-entry.patch
 
@@ -644,7 +640,7 @@ Patch852: nouveau-add-maxwell-to-backlight-init.patch
 Patch855: kvm-fix-page-struct-leak-in-handle_vmon.patch
 
 # grsecurity patches
-Patch26000: grsecurity-3.1-4.9.21-201704091948.patch
+Patch26000: grsecurity-3.1-4.9.22-201704120836.patch
 
 # END OF PATCH DEFINITIONS
 
