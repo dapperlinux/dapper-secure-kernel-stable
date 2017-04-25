@@ -54,7 +54,7 @@ Summary: The Linux kernel
 %if 0%{?released_kernel}
 
 # Do we have a -stable update to apply?
-%define stable_update 22
+%define stable_update 24
 # Set rpm version accordingly
 %if 0%{?stable_update}
 %define stablerev %{stable_update}
@@ -636,11 +636,8 @@ Patch851: selinux-namespace-fix.patch
 #rhbz 1390308
 Patch852: nouveau-add-maxwell-to-backlight-init.patch
 
-# CVE-2017-2596 rhbz 1417812 1417813
-Patch855: kvm-fix-page-struct-leak-in-handle_vmon.patch
-
 # grsecurity patches
-Patch26000: grsecurity-3.1-4.9.22-201704120836.patch
+Patch26000: grsecurity-3.1-4.9.24-201704220732.patch
 
 # END OF PATCH DEFINITIONS
 
