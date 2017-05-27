@@ -42,7 +42,7 @@ Summary: The Linux kernel
 # For non-released -rc kernels, this will be appended after the rcX and
 # gitX tags, so a 3 here would become part of release "0.rcX.gitX.3"
 #
-%global baserelease 201
+%global baserelease 202
 %global fedora_build %{baserelease}
 
 # base_sublevel is the kernel version we're starting with and patching
@@ -54,7 +54,7 @@ Summary: The Linux kernel
 %if 0%{?released_kernel}
 
 # Do we have a -stable update to apply?
-%define stable_update 24
+%define stable_update 30
 # Set rpm version accordingly
 %if 0%{?stable_update}
 %define stablerev %{stable_update}
@@ -550,7 +550,7 @@ Patch472: crash-driver.patch
 
 Patch473: Add-secure_modules-call.patch
 
-Patch474: PCI-Lock-down-BAR-access-when-module-security-is-ena.patch
+#Patch474: PCI-Lock-down-BAR-access-when-module-security-is-ena.patch
 
 # Fails to patch with grsecurity
 #Patch475: x86-Lock-down-IO-port-access-when-module-security-is.patch
@@ -636,8 +636,8 @@ Patch851: selinux-namespace-fix.patch
 #rhbz 1390308
 Patch852: nouveau-add-maxwell-to-backlight-init.patch
 
-# grsecurity patches
-Patch26000: grsecurity-3.1-4.9.24-201704220732.patch
+# Dapper Secure Kernel Patchset Stable
+Patch26000: dapper-secure-kernel-patchset-4.9.30-2017-05-27.patch
 
 # END OF PATCH DEFINITIONS
 
