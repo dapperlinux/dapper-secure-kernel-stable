@@ -24,7 +24,7 @@ Summary: The Linux kernel
 %global zipsed -e 's/\.ko$/\.ko.xz/'
 %endif
 
-%define buildid .grsec
+%define buildid .dappersec
 
 # baserelease defines which build revision of this kernel version we're
 # building.  We used to call this fedora_build, but the magical name
@@ -54,7 +54,7 @@ Summary: The Linux kernel
 %if 0%{?released_kernel}
 
 # Do we have a -stable update to apply?
-%define stable_update 30
+%define stable_update 31
 # Set rpm version accordingly
 %if 0%{?stable_update}
 %define stablerev %{stable_update}
@@ -637,7 +637,7 @@ Patch851: selinux-namespace-fix.patch
 Patch852: nouveau-add-maxwell-to-backlight-init.patch
 
 # Dapper Secure Kernel Patchset Stable
-Patch26000: dapper-secure-kernel-patchset-4.9.30-2017-05-27.patch
+Patch26000: dapper-secure-kernel-patchset-4.9.31-2017-06-08.patch
 
 # END OF PATCH DEFINITIONS
 
