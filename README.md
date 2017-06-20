@@ -11,7 +11,7 @@ The build process is heavily based on the Fedora Linux kernel build process, and
 
 | Dapper Linux | Linux Version | Dapper Secure Kernel Patchset |
 | ------------ | ------------- | ----------------------------- |
-| 25           | 4.9.32        | 4.9.32-2017-06-15             |
+| 25           | 4.9.33        | 4.9.33-2017-06-20             |
 
 
 ### Packaging and Building a Source RPM for COPR
