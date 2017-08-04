@@ -54,7 +54,7 @@ Summary: The Linux kernel
 %if 0%{?released_kernel}
 
 # Do we have a -stable update to apply?
-%define stable_update 37
+%define stable_update 40
 # Set rpm version accordingly
 %if 0%{?stable_update}
 %define stablerev %{stable_update}
@@ -637,7 +637,7 @@ Patch851: selinux-namespace-fix.patch
 Patch852: nouveau-add-maxwell-to-backlight-init.patch
 
 # Dapper Secure Kernel Patchset Stable
-Patch26000: dapper-secure-kernel-patchset-4.9.37-2017-07-14.patch
+Patch26000: dapper-secure-kernel-patchset-4.9.40-2017-08-04.patch
 
 # END OF PATCH DEFINITIONS
 
