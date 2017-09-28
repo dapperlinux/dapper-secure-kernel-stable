@@ -54,7 +54,7 @@ Summary: The Linux kernel
 %if 0%{?released_kernel}
 
 # Do we have a -stable update to apply?
-%define stable_update 51
+%define stable_update 52
 # Set rpm version accordingly
 %if 0%{?stable_update}
 %define stablerev %{stable_update}
@@ -637,7 +637,7 @@ Patch851: selinux-namespace-fix.patch
 Patch852: nouveau-add-maxwell-to-backlight-init.patch
 
 # Dapper Secure Kernel Patchset Stable
-Patch26000: dapper-secure-kernel-patchset-4.9.51-2017-09-23.patch
+Patch26000: dapper-secure-kernel-patchset-4.9.52-2017-09-28.patch
 
 # END OF PATCH DEFINITIONS
 
@@ -1973,7 +1973,7 @@ fi\
 %{expand:%%posttrans %{?1:%{1}-}core}\
 /bin/kernel-install add %{KVERREL}%{?1:+%{1}} /lib/modules/%{KVERREL}%{?1:+%{1}}/vmlinuz || exit $?\
 if [ $1 -gt 1 ]; then\
-grub2-mkconfig -o /boot/grub2/grub.cfg || :\
+grub2-mkconfig -o /boot/grub2/grub.cfg &> /dev/null || :\
 fi\
 %{nil}
 
