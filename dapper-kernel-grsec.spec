@@ -54,7 +54,7 @@ Summary: The Linux kernel
 %if 0%{?released_kernel}
 
 # Do we have a -stable update to apply?
-%define stable_update 53
+%define stable_update 54
 # Set rpm version accordingly
 %if 0%{?stable_update}
 %define stablerev %{stable_update}
@@ -407,6 +407,7 @@ BuildRequires: binutils-%{_build_arch}-linux-gnu, gcc-%{_build_arch}-linux-gnu
 
 #Required for grsecurity
 BuildRequires: gcc-plugin-devel
+BuildRequires: gcc-c++
 
 Source0: ftp://ftp.kernel.org/pub/linux/kernel/v4.x/linux-%{kversion}.tar.xz
 
@@ -637,7 +638,7 @@ Patch851: selinux-namespace-fix.patch
 Patch852: nouveau-add-maxwell-to-backlight-init.patch
 
 # Dapper Secure Kernel Patchset Stable
-Patch26000: dapper-secure-kernel-patchset-4.9.53-2017-10-06.patch
+Patch26000: dapper-secure-kernel-patchset-4.9.54-2017-10-11.patch
 
 # END OF PATCH DEFINITIONS
 
