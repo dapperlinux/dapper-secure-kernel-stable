@@ -1,6 +1,6 @@
-# Dapper-Kernel-Grsec
+# Dapper-Secure-Kernel-Stable
 
-## Dapper Linux Grsecurity Hardened Kernel with Fedora Patches
+## Dapper Linux Dappersec Hardened Kernel with Fedora Patches
 
 ### Introduction
 
@@ -11,7 +11,7 @@ The build process is heavily based on the Fedora Linux kernel build process, and
 
 | Dapper Linux | Linux Version | Dapper Secure Kernel Patchset |
 | ------------ | ------------- | ----------------------------- |
-| 26           | 4.9.61        | 4.9.61-2017-11-13             |
+| 27           | 4.9.62        | 4.9.62-2017-11-17             |
 
 
 ### Packaging and Building a Source RPM for COPR
@@ -38,15 +38,9 @@ $ sudo dnf builddep kernel
 $ sudo dnf install numactl-devel pesign
 ```
 
-Now we fetch the test patch from [grsecurity](https://grsecurity.net/download.php) and place it in the SOURCES directory.
+Now we fetch the test patch from [dapperlinux](https://dapperlinux.com/patchset.html) and place it in the SOURCES directory.
 
-```bash
-$ cd ~/rpmbuild/SOURCES
-$ wget https://grsecurity.net/test/grsecurity-3.1-4.9.8-201702071801.patch
-$ wget https://grsecurity.net/test/grsecurity-3.1-4.9.8-201702071801.patch.sig
-```
-
-Now we verify the signiture of the patch (you might have to [import](http://en.wikibooks.org/wiki/Grsecurity/Obtaining_grsecurity#Verifying_the_Downloads) the signing key first). Ensure the signature is good.
+Now we verify the signiture of the patch (you might have to [download](http://dapperlinux.com/contact.html) the signing key first). Ensure the signature is good.
 
 ```bash
 $ gpg --verify grsecurity-3.1-4.9.8-201702071801.patch.sig
@@ -58,7 +52,7 @@ gpg:          There is no indication that the signature belongs to the owner.
 Primary key fingerprint: DE94 52CE 46F4 2094 907F  108B 44D1 C0F8 2525 FE49
 ```
 
-Now, add the grsecurity patch to the kernel.spec file. In the SPECS directory, edit kernel.spec and change
+Now, add the dappersec patch to the kernel.spec file. In the SPECS directory, edit kernel.spec and change
 
 ```spec
 #define buildid .local
@@ -67,7 +61,7 @@ Now, add the grsecurity patch to the kernel.spec file. In the SPECS directory, e
 to:
 
 ```spec
-%define buildid .grsec
+%define buildid .dappersec
 ```
 
 Since Dapper Linux is only interested in supporting x86_64 at this point in time, remove the other architectures by adding to the nobuild arches flag:
@@ -153,7 +147,7 @@ Patch failed at 0087
 [...]
 ```
 
-It is completly normal to fail at this stage. Most of these patches will fail because Fedora ship a patch that may already exist in grsecurity's patchset, causing a collision. Or a particular patch may have conflicitng changes with what is found in grsecurity. We can find the reasons behind failure by running a quick grep over the SOURCES diretory over the offending files.
+It is completly normal to fail at this stage. Most of these patches will fail because Fedora ship a patch that may already exist in dappersec patchset, causing a collision. Or a particular patch may have conflicitng changes with what is found in grsecurity. We can find the reasons behind failure by running a quick grep over the SOURCES diretory over the offending files.
 
 ```bash
 $ cd ~/rpmbuild/SOURCES
@@ -381,7 +375,7 @@ error: Bad exit status from /var/tmp/rpm-tmp.ioWAuT (%prep)
 This just means that there are options that are required to be configured in the kernel that haven't been configured yet. Namely, the grsecurity options haven't been configured yet. So, we will go to the build directory and run make menuconfig to select what grsecurity options we require. Grsecurity options live in Security -> Grsecurity.
 
 ```bash
-$ cd ~/rpmbuild/BUILD/kernel-4.9.fc25/linux-4.9.8-201.grsec.fc25.x86_64/
+$ cd ~/rpmbuild/BUILD/kernel-4.9.fc25/linux-4.9.8-201.dappersec.fc25.x86_64/
 $ make menuconfig
 ```
 
@@ -415,19 +409,19 @@ Hopefully that's all we need to do, so change back to the SPECS directory and do
 
 ```bash
 $ cd ~/rpmbuild/SPECS
-$ rpmbuild -bp kernel.spec 
+$ rpmbuild -bp dapper-secure-kernel.spec 
 ```
 
 And finally, we can generate a source RPM for the copr or koji build system
 
 ```bash
 $ rpmbuild -bs kernel.spec
-Wrote: ~/rpmbuild/SRPMS/dapper-kernel-grsec-4.9.8-201.grsec.fc25.src.rpm
+Wrote: ~/rpmbuild/SRPMS/dapper-secure-kernel-4.9.8-201.dappersec.fc25.src.rpm
 ```
 
-It's probably worth doing a test build before submitting it to a build server, so we can weed out any last minute compilation bugs. The following will build just the dapper-kernel-grsec, dapper-kernel-grsec-core, dapper-kernel-grsec-modules and dapper-kernel-grsec-modules-extra
+It's probably worth doing a test build before submitting it to a build server, so we can weed out any last minute compilation bugs. The following will build just the dapper-secure-kernel, dapper-secure-kernel-core, dapper-secure-kernel-modules and dapper-secure-kernel-modules-extra
 
 ```bash
-$ rpmbuild -bb --without debug --without debuginfo --without extra --without perf --without tools kernel.spec
+$ rpmbuild -bb --without debug --without debuginfo --without extra --without perf --without tools dapper-secure-kernel.spec
 ```
 
