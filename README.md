@@ -5,13 +5,13 @@
 ### Introduction
 
 This repository contains the current Linux kernel used by Dapper Linux.
-The build process is heavily based on the Fedora Linux kernel build process, and should be familliar to those who build their own kernels. 
+The build process is heavily based on the Fedora Linux kernel build process, and should be familliar to those who build their own kernels.
 
 ### Current supported versions by Dapper Linux:
 
 | Dapper Linux | Linux Version | Dapper Secure Kernel Patchset |
 | ------------ | ------------- | ----------------------------- |
-| 27           | 4.9.70        | 4.9.70-2017-12-20             |
+| 27           | 4.9.74        | 4.9.74-2018-01-04             |
 
 
 ### Packaging and Building a Source RPM for COPR
@@ -143,7 +143,7 @@ error: patch failed: drivers/platform/x86/asus-wmi.c:1872
 error: drivers/platform/x86/asus-wmi.c: patch does not apply
 error: patch failed: init/Kconfig:1168
 error: init/Kconfig: patch does not apply
-Patch failed at 0087 
+Patch failed at 0087
 [...]
 ```
 
@@ -161,7 +161,7 @@ grsecurity-3.1-4.9.8-201702071801.patch:31448:--- a/arch/x86/kernel/ioport.c
 grsecurity-3.1-4.9.8-201702071801.patch:31449:+++ b/arch/x86/kernel/ioport.c
 ```
 
-We can see the x86-Lock-down-IO-port-access-when-module-security-is.patch is causing problems, so we can comment it out in the kernel.spec file. 
+We can see the x86-Lock-down-IO-port-access-when-module-security-is.patch is causing problems, so we can comment it out in the kernel.spec file.
 
 ```spec
 # Fails to patch with grsecurity
@@ -189,11 +189,11 @@ error: patch failed: arch/x86/entry/vdso/Makefile:170
 error: arch/x86/entry/vdso/Makefile: patch does not apply
 error: patch failed: init/Kconfig:1168
 error: init/Kconfig: patch does not apply
-Patch failed at 0081 
+Patch failed at 0081
 [...]
 ```
 
-Now, both Fedora and grsecurity both patch the vsdo Makefile, and the Kconfig with their own values. Lets fix the vsdo Makefile first. 
+Now, both Fedora and grsecurity both patch the vsdo Makefile, and the Kconfig with their own values. Lets fix the vsdo Makefile first.
 
 We need to find which patch file is in disagreement with the grsecurity patch, and then decide which patch we want to ship. So we will do a grep over the source files like so:
 
@@ -225,7 +225,7 @@ index d540966..eeb47b6 100644
 +                      -Wl,-T,$(filter %.lds,$^) $(filter %.o,$^) \
 +               $(if $(AFTER_LINK),; $(AFTER_LINK)) && \
 +               sh $(srctree)/$(src)/checkundef.sh '$(NM)' '$@'
- 
+
  VDSO_LDFLAGS = -fPIC -shared $(call cc-ldoption, -Wl$(comma)--hash-style=both) \
         $(call cc-ldoption, -Wl$(comma)--build-id) -Wl,-Bsymbolic $(LTO_CFLAGS)
 ```
@@ -295,7 +295,7 @@ index 44b8762..59e9d90 100644
 @@ -11,6 +11,8 @@
  #include <asm/special_insns.h>
  #include <asm/preempt.h>
- 
+
 +#include <asm/desc.h>
 +
  #ifndef CONFIG_X86_CMPXCHG64
@@ -306,7 +306,7 @@ index 44b8762..59e9d90 100644
 Now, when we go for a rebuild, we see the next very strange error:
 
 ```bash
-$ rpmbuild -bp kernel.spec 
+$ rpmbuild -bp kernel.spec
 [...]
 warning: squelched 110 whitespace errors
 warning: 115 lines add whitespace errors.
@@ -358,7 +358,7 @@ BuildRequires: gcc-plugin-devel
 and now we can try and patch again and find the patches now work, but we have more errors:
 
 ```bash
-$ rpmbuild -bp kernel.spec 
+$ rpmbuild -bp kernel.spec
 [...]
 warning: squelched 110 whitespace errors
 warning: 115 lines add whitespace errors.
@@ -409,7 +409,7 @@ Hopefully that's all we need to do, so change back to the SPECS directory and do
 
 ```bash
 $ cd ~/rpmbuild/SPECS
-$ rpmbuild -bp dapper-secure-kernel.spec 
+$ rpmbuild -bp dapper-secure-kernel.spec
 ```
 
 And finally, we can generate a source RPM for the copr or koji build system
