@@ -638,7 +638,7 @@ Patch851: selinux-namespace-fix.patch
 Patch852: nouveau-add-maxwell-to-backlight-init.patch
 
 # Dapper Secure Kernel Patchset Stable
-Patch26000: dapper-secure-kernel-patchset-4.9.74-2018-01-04.patch
+Patch26000: dapper-secure-kernel-patchset-4.9.74-2018-01-08.patch
 
 # END OF PATCH DEFINITIONS
 
