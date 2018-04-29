@@ -54,7 +54,7 @@ Summary: The Linux kernel
 %if 0%{?released_kernel}
 
 # Do we have a -stable update to apply?
-%define stable_update 74
+%define stable_update 75
 # Set rpm version accordingly
 %if 0%{?stable_update}
 %define stablerev %{stable_update}
@@ -638,7 +638,7 @@ Patch851: selinux-namespace-fix.patch
 Patch852: nouveau-add-maxwell-to-backlight-init.patch
 
 # Dapper Secure Kernel Patchset Stable
-Patch26000: dapper-secure-kernel-patchset-4.9.74-2018-01-08.patch
+Patch26000: dapper-secure-kernel-patchset-4.9.75-2018-04-28.patch
 
 # END OF PATCH DEFINITIONS
 
@@ -1207,6 +1207,7 @@ fi
 %if 0%{?stable_base}
 # This is special because the kernel spec is hell and nothing is consistent
 xzcat %{SOURCE5000} | patch -p1 -F1 -s
+git add .
 git commit -a -m "Stable update"
 %endif
 
