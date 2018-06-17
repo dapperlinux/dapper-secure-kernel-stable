@@ -54,7 +54,7 @@ Summary: The Linux kernel
 %if 0%{?released_kernel}
 
 # Do we have a -stable update to apply?
-%define stable_update 107
+%define stable_update 109
 # Set rpm version accordingly
 %if 0%{?stable_update}
 %define stablerev %{stable_update}
@@ -87,12 +87,12 @@ Summary: The Linux kernel
 # standard kernel
 %define with_up        %{?_without_up:        0} %{?!_without_up:        1}
 # kernel PAE (only valid for i686 (PAE) and ARM (lpae))
-%define with_pae       %{?_without_pae:       0} %{?!_without_pae:       1}
+%define with_pae       %{?_without_pae:       0} %{?!_without_pae:       0}
 # kernel-debug
 %define with_debug     %{?_without_debug:     0} %{?!_without_debug:     0}
 # kernel-headers
-%define with_headers   %{?_without_headers:   0} %{?!_without_headers:   1}
-%define with_cross_headers   %{?_without_cross_headers:   0} %{?!_without_cross_headers:   1}
+%define with_headers   %{?_without_headers:   0} %{?!_without_headers:   0}
+%define with_cross_headers   %{?_without_cross_headers:   0} %{?!_without_cross_headers:   0}
 # perf
 %define with_perf      %{?_without_perf:      0} %{?!_without_perf:      0}
 # tools
@@ -638,7 +638,7 @@ Patch851: selinux-namespace-fix.patch
 Patch852: nouveau-add-maxwell-to-backlight-init.patch
 
 # Dapper Secure Kernel Patchset Stable
-Patch26000: dapper-secure-kernel-patchset-4.9.107-2018-06-08.patch
+Patch26000: dapper-secure-kernel-patchset-4.9.109-2018-06-17.patch
 
 # END OF PATCH DEFINITIONS
 
