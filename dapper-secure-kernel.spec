@@ -54,7 +54,7 @@ Summary: The Linux kernel
 %if 0%{?released_kernel}
 
 # Do we have a -stable update to apply?
-%define stable_update 109
+%define stable_update 110
 # Set rpm version accordingly
 %if 0%{?stable_update}
 %define stablerev %{stable_update}
@@ -638,7 +638,7 @@ Patch851: selinux-namespace-fix.patch
 Patch852: nouveau-add-maxwell-to-backlight-init.patch
 
 # Dapper Secure Kernel Patchset Stable
-Patch26000: dapper-secure-kernel-patchset-4.9.109-2018-06-17.patch
+Patch26000: dapper-secure-kernel-patchset-4.9.110-2018-06-29.patch
 
 # END OF PATCH DEFINITIONS
 
@@ -2348,7 +2348,7 @@ fi
 
 * Mon Oct 17 2016 Justin M. Forbes <jforbes@fedoraproject.org> - 4.8.2-300
 - Linux v4.8.2
-- i8042 - skip selftest on ASUS laptops 
+- i8042 - skip selftest on ASUS laptops
 
 * Sat Oct 15 2016 Peter Robinson <pbrobinson@fedoraproject.org>
 - Build in AXP20X_I2C (should fix rhbz 1352140)

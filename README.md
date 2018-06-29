@@ -11,7 +11,7 @@ The build process is heavily based on the Fedora Linux kernel build process, and
 
 | Dapper Linux | Linux Version | Dapper Secure Kernel Patchset |
 | ------------ | ------------- | ----------------------------- |
-| 28           | 4.9.109       | 4.9.109-2018-06-17            |
+| 28           | 4.9.110       | 4.9.110-2018-06-29            |
 
 
 ### Packaging and Building a Source RPM for COPR
@@ -23,7 +23,7 @@ We need to install a RPM development toolchain:
 
 ```bash
 $ sudo dnf group install c-development
-$ sudo dnf install rpmdevtools yum-utils gcc-plugin-devel
+$ sudo dnf install rpmdevtools yum-utils
 $ rpmdev-setuptree
 ```
 
@@ -35,7 +35,7 @@ Next, we get the current kernel source RPM, install it to the rpmbuild dir and f
 $ yumdownloader --source kernel
 $ rpm -Uvh kernel-4.9.8-201.fc25.src.rpm
 $ sudo dnf builddep kernel
-$ sudo dnf install numactl-devel pesign
+$ sudo dnf install numactl-devel pesign gcc-plugin-devel
 ```
 
 Now we fetch the test patch from [dapperlinux](https://dapperlinux.com/patchset.html) and place it in the SOURCES directory.
