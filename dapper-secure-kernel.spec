@@ -54,7 +54,7 @@ Summary: The Linux kernel
 %if 0%{?released_kernel}
 
 # Do we have a -stable update to apply?
-%define stable_update 124
+%define stable_update 125
 # Set rpm version accordingly
 %if 0%{?stable_update}
 %define stablerev %{stable_update}
@@ -515,7 +515,7 @@ Patch427: arm-revert-mmc-omap_hsmmc-Use-dma_request_chan-for-reque.patch
 
 # Not particularly happy we don't yet have a proper upstream resolution this is the right direction
 # https://www.spinics.net/lists/arm-kernel/msg535191.html
-Patch429: arm64-mm-Fix-memmap-to-be-initialized-for-the-entire-section.patch
+#Patch429: arm64-mm-Fix-memmap-to-be-initialized-for-the-entire-section.patch
 
 # http://patchwork.ozlabs.org/patch/587554/
 Patch430: ARM-tegra-usb-no-reset.patch
@@ -638,7 +638,7 @@ Patch851: selinux-namespace-fix.patch
 Patch852: nouveau-add-maxwell-to-backlight-init.patch
 
 # Dapper Secure Kernel Patchset Stable
-Patch26000: dapper-secure-kernel-patchset-4.9.124-2018-08-26.patch
+Patch26000: dapper-secure-kernel-patchset-4.9.125-2018-09-07.patch
 
 # END OF PATCH DEFINITIONS
 
