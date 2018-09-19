@@ -147,7 +147,7 @@ Patch failed at 0087
 [...]
 ```
 
-It is completly normal to fail at this stage. Most of these patches will fail because Fedora ship a patch that may already exist in dappersec patchset, causing a collision. Or a particular patch may have conflicitng changes with what is found in grsecurity. We can find the reasons behind failure by running a quick grep over the SOURCES diretory over the offending files.
+It is completely normal to fail at this stage. Most of these patches will fail because Fedora ship a patch that may already exist in dappersec patchset, causing a collision. Or a particular patch may have conflicting changes with what is found in grsecurity. We can find the reasons behind the failure by running a quick grep over the SOURCES directory over the offending files.
 
 ```bash
 $ cd ~/rpmbuild/SOURCES
@@ -232,7 +232,7 @@ index d540966..eeb47b6 100644
 
 Next up is fixing the Kconfig file. It seems Fedora and grsecurity double up on CHECKPOINT_RESTORE
 
-We find what Line it belongs to by searching for "CHECKPOINT_RESTORE"
+We find what line it belongs to by searching for "CHECKPOINT_RESTORE"
 
 ```bash
 $ grep -Rin "CHECKPOINT_RESTORE" grsecurity-3.1-4.9.8-201702071801.patch
