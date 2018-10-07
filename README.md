@@ -11,7 +11,7 @@ The build process is heavily based on the Fedora Linux kernel build process, and
 
 | Dapper Linux | Linux Version | Dapper Secure Kernel Patchset |
 | ------------ | ------------- | ----------------------------- |
-| 28           | 4.9.130       | 4.9.130-2018-10-02            |
+| 28           | 4.9.131       | 4.9.131-2018-10-07            |
 
 
 ### Packaging and Building a Source RPM for COPR
@@ -276,33 +276,6 @@ index 0000000..7cd6065
 +-grsec
 ```
 
-In recent Kernels (Linux 4.9.8+), there has been a rarther odd collision in the x86 section of the tree. Since Dapper Linux is amd64 only, this can be safely removed.
-
-```git
-$ grep -Rin "arch/x86/include/asm/asm-prototypes.h" grsecurity-3.1-4.9.13-201702270729.patch
-grsecurity-3.1-4.9.13-201702270729.patch:22248:diff --git a/arch/x86/include/asm/asm-prototypes.h b/arch/x86/include/asm/asm-prototypes.h
-grsecurity-3.1-4.9.13-201702270729.patch:22250:--- a/arch/x86/include/asm/asm-prototypes.h
-grsecurity-3.1-4.9.13-201702270729.patch:22251:+++ b/arch/x86/include/asm/asm-prototypes.h
-```
-
-So we need to jump to line 22248 and remove:
-
-```git
-diff --git a/arch/x86/include/asm/asm-prototypes.h b/arch/x86/include/asm/asm-prototypes.h
-index 44b8762..59e9d90 100644
---- a/arch/x86/include/asm/asm-prototypes.h
-+++ b/arch/x86/include/asm/asm-prototypes.h
-@@ -11,6 +11,8 @@
- #include <asm/special_insns.h>
- #include <asm/preempt.h>
-
-+#include <asm/desc.h>
-+
- #ifndef CONFIG_X86_CMPXCHG64
- extern void cmpxchg8b_emu(void);
- #endif
-```
-
 Now, when we go for a rebuild, we see the next very strange error:
 
 ```bash
@@ -322,16 +295,6 @@ $ cat author-script
 GIT_AUTHOR_NAME=''
 GIT_AUTHOR_EMAIL=''
 GIT_AUTHOR_DATE=''
-```
-
-We can fix this by adding the following to the top of the grsecurity patch:
-
-```bash
-$ vim grsecurity-3.1-4.9.8-201702071801.patch +1
-From: "kernel-team@dapperlinux.com" <kernel-team@dapperlinux.com>
-Date: Wed,  8 Feb 2017 00:00:00 +0000
-Subject: [PATCH] Grsecurity Patchset
----
 ```
 
 There is also a bug in the kernel.spec file where it will try and merge and then run newoptions over build configs that we aren't even going to build which prevents us from continuing. We can fix it by changing:
